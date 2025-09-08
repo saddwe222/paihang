@@ -275,7 +275,7 @@
         
         .table-container {
             flex: 1;
-            overflow: visible;
+            overflow-x: auto;
             border-radius: var(--border-radius);
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
@@ -553,7 +553,6 @@
             border-top: 1px solid var(--light-gray);
         }
         
-        /* 奖励规则样式 */
         .rewards-section {
             background: white;
             border-radius: var(--border-radius);
@@ -601,15 +600,15 @@
         }
         
         .reward-card:nth-child(1) {
-            border-left-color: #FFD700; /* 金色 */
+            border-left-color: #FFD700;
         }
         
         .reward-card:nth-child(2) {
-            border-left-color: #C0C0C0; /* 银色 */
+            border-left-color: #C0C0C0;
         }
         
         .reward-card:nth-child(3) {
-            border-left-color: #CD7F32; /* 铜色 */
+            border-left-color: #CD7F32;
         }
         
         .reward-card::before {
@@ -701,7 +700,6 @@
             border: 1px dashed var(--success);
         }
         
-        /* 响应式调整 */
         @media (max-width: 1400px) {
             .dashboard {
                 flex-direction: column;
@@ -899,30 +897,20 @@
                     <table id="scoreTable">
                         <thead>
                             <tr>
-                                <th>排名</th>
                                 <th>成员信息</th>
                                 <th>M1数量</th>
-                                <th>M1积分</th>
                                 <th>M2数量</th>
-                                <th>M2积分</th>
                                 <th>M3数量</th>
-                                <th>M3积分</th>
                                 <th>M4数量</th>
-                                <th>M4积分</th>
                                 <th>M5数量</th>
-                                <th>M5积分</th>
                                 <th>M6数量</th>
-                                <th>M6积分</th>
                                 <th>M7数量</th>
-                                <th>M7积分</th>
                                 <th>M8数量</th>
-                                <th>M8积分</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="rank">1</td>
                                 <td>
                                     <div class="member-info">
                                         <div class="member-name"><input type="text" class="name name-input" value="张三丰"></div>
@@ -936,7 +924,6 @@
                                         <button onclick="changeNumber(this, 1, 'm1')">+</button>
                                     </div>
                                 </td>
-                                <td class="m1-points">15</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm2')">-</button>
@@ -944,7 +931,6 @@
                                         <button onclick="changeNumber(this, 1, 'm2')">+</button>
                                     </div>
                                 </td>
-                                <td class="m2-points">36</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm3')">-</button>
@@ -952,7 +938,6 @@
                                         <button onclick="changeNumber(this, 1, 'm3')">+</button>
                                     </div>
                                 </td>
-                                <td class="m3-points">80</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm4')">-</button>
@@ -960,7 +945,6 @@
                                         <button onclick="changeNumber(this, 1, 'm4')">+</button>
                                     </div>
                                 </td>
-                                <td class="m4-points">90</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm5')">-</button>
@@ -968,7 +952,6 @@
                                         <button onclick="changeNumber(this, 1, 'm5')">+</button>
                                     </div>
                                 </td>
-                                <td class="m5-points">60</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm6')">-</button>
@@ -976,7 +959,6 @@
                                         <button onclick="changeNumber(this, 1, 'm6')">+</button>
                                     </div>
                                 </td>
-                                <td class="m6-points">0</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm7')">-</button>
@@ -984,7 +966,6 @@
                                         <button onclick="changeNumber(this, 1, 'm7')">+</button>
                                     </div>
                                 </td>
-                                <td class="m7-points">0</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm8')">-</button>
@@ -992,11 +973,9 @@
                                         <button onclick="changeNumber(this, 1, 'm8')">+</button>
                                     </div>
                                 </td>
-                                <td class="m8-points">0</td>
                                 <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
                             </tr>
                             <tr>
-                                <td class="rank">2</td>
                                 <td>
                                     <div class="member-info">
                                         <div class="member-name"><input type="text" class="name name-input" value="李四"></div>
@@ -1010,7 +989,6 @@
                                         <button onclick="changeNumber(this, 1, 'm1')">+</button>
                                     </div>
                                 </td>
-                                <td class="m1-points">18</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm2')">-</button>
@@ -1018,7 +996,6 @@
                                         <button onclick="changeNumber(this, 1, 'm2')">+</button>
                                     </div>
                                 </td>
-                                <td class="m2-points">30</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm3')">-</button>
@@ -1026,7 +1003,6 @@
                                         <button onclick="changeNumber(this, 1, 'm3')">+</button>
                                     </div>
                                 </td>
-                                <td class="m3-points">60</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm4')">-</button>
@@ -1034,7 +1010,6 @@
                                         <button onclick="changeNumber(this, 1, 'm4')">+</button>
                                     </div>
                                 </td>
-                                <td class="m4-points">60</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm5')">-</button>
@@ -1042,7 +1017,6 @@
                                         <button onclick="changeNumber(this, 1, 'm5')">+</button>
                                     </div>
                                 </td>
-                                <td class="m5-points">0</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm6')">-</button>
@@ -1050,7 +1024,6 @@
                                         <button onclick="changeNumber(this, 1, 'm6')">+</button>
                                     </div>
                                 </td>
-                                <td class="m6-points">0</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm7')">-</button>
@@ -1058,7 +1031,6 @@
                                         <button onclick="changeNumber(this, 1, 'm7')">+</button>
                                     </div>
                                 </td>
-                                <td class="m7-points">0</td>
                                 <td>
                                     <div class="number-controls">
                                         <button onclick="changeNumber(this, -1, 'm8')">-</button>
@@ -1066,29 +1038,20 @@
                                         <button onclick="changeNumber(this, 1, 'm8')">+</button>
                                     </div>
                                 </td>
-                                <td class="m8-points">0</td>
                                 <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="2"><button class="add-member-btn" onclick="addParticipant()"><i class="fas fa-plus"></i> 添加新成员</button></td>
+                                <td><button class="add-member-btn" onclick="addParticipant()"><i class="fas fa-plus"></i> 添加新成员</button></td>
                                 <td id="totalM1">33</td>
-                                <td id="totalM1Points">33</td>
                                 <td id="totalM2">22</td>
-                                <td id="totalM2Points">66</td>
                                 <td id="totalM3">14</td>
-                                <td id="totalM3Points">140</td>
                                 <td id="totalM4">5</td>
-                                <td id="totalM4Points">150</td>
                                 <td id="totalM5">1</td>
-                                <td id="totalM5Points">60</td>
                                 <td id="totalM6">0</td>
-                                <td id="totalM6Points">0</td>
                                 <td id="totalM7">0</td>
-                                <td id="totalM7Points">0</td>
                                 <td id="totalM8">0</td>
-                                <td id="totalM8Points">0</td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -1134,7 +1097,6 @@
             </div>
         </div>
         
-        <!-- 奖励规则部分 -->
         <div class="rewards-section">
             <h2 class="rewards-header"><i class="fas fa-trophy"></i> 奖励规则</h2>
             
@@ -1228,14 +1190,10 @@
     </div>
 
     <script>
-        // 创建一个对象来记录每个成员达到当前积分的时间
         const participantRecords = {};
-        
-        // 自动保存的键名
         const STORAGE_KEY = 'employee_invitation_score_data';
         const RECORDS_STORAGE_KEY = 'employee_invitation_records_data';
         
-        // 积分规则
         const POINT_RULES = {
             m1: 1,
             m2: 3,
@@ -1247,7 +1205,6 @@
             m8: 500
         };
         
-        // 初始化表格
         document.addEventListener('DOMContentLoaded', function() {
             loadSavedData();
             if (document.querySelectorAll('#scoreTable tbody tr').length === 0) {
@@ -1255,16 +1212,13 @@
             }
         });
         
-        // 加载保存的数据
         function loadSavedData() {
             const savedData = localStorage.getItem(STORAGE_KEY);
             const savedRecords = localStorage.getItem(RECORDS_STORAGE_KEY);
             
-            // 加载时间记录数据
             if (savedRecords) {
                 try {
                     const records = JSON.parse(savedRecords);
-                    // 将字符串日期转换为Date对象
                     for (const name in records) {
                         if (records[name] && records[name].reachTime) {
                             records[name].reachTime = new Date(records[name].reachTime);
@@ -1276,7 +1230,6 @@
                 }
             }
             
-            // 加载表格数据
             if (savedData) {
                 try {
                     const data = JSON.parse(savedData);
@@ -1294,10 +1247,8 @@
                         row.querySelector('.m7').value = rowData.m7 || 0;
                         row.querySelector('.m8').value = rowData.m8 || 0;
                         
-                        // 计算并更新行数据
                         calculateRow(row.querySelector('.m1'));
                         
-                        // 确保新添加的成员有时间记录
                         const name = rowData.name || "未命名成员";
                         if (!participantRecords[name]) {
                             participantRecords[name] = {
@@ -1315,7 +1266,6 @@
             }
         }
         
-        // 保存数据到本地存储
         function saveData() {
             const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
             const dataToSave = rows.map(row => ({
@@ -1330,13 +1280,12 @@
                 m8: row.querySelector('.m8').value
             }));
             
-            // 准备时间记录数据，将Date对象转换为字符串
             const recordsToSave = {};
             for (const name in participantRecords) {
                 if (participantRecords[name]) {
                     recordsToSave[name] = {
                         maxPoints: participantRecords[name].maxPoints,
-                        reachTime: participantRecords[name].reachTime.toISOString() // 转换为ISO字符串
+                        reachTime: participantRecords[name].reachTime.toISOString()
                     };
                 }
             }
@@ -1345,26 +1294,22 @@
             localStorage.setItem(RECORDS_STORAGE_KEY, JSON.stringify(recordsToSave));
         }
         
-        // 手动保存
         function manualSave() {
             saveData();
             showSaveNotification('数据已手动保存！');
         }
         
-        // 自动保存（立即执行）
         function autoSave() {
             saveData();
             console.log('数据自动保存');
         }
         
-        // 显示保存成功通知
         function showSaveNotification(message) {
             const notification = document.getElementById('saveNotification');
             notification.querySelector('span:last-child').textContent = message;
             notification.style.opacity = 0;
             notification.style.display = 'flex';
             
-            // 触发动画
             setTimeout(() => {
                 notification.style.opacity = 1;
                 notification.style.transform = 'translateY(0)';
@@ -1376,12 +1321,10 @@
             }, 3000);
         }
         
-        // 添加新参与者
         function addParticipant(save = true) {
             const tbody = document.querySelector('#scoreTable tbody');
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td class="rank"></td>
                 <td>
                     <div class="member-info">
                         <div class="member-name"><input type="text" class="name name-input" placeholder="会员账号"></div>
@@ -1395,7 +1338,6 @@
                         <button onclick="changeNumber(this, 1, 'm1')">+</button>
                     </div>
                 </td>
-                <td class="m1-points">0</td>
                 <td>
                     <div class="number-controls">
                         <button onclick="changeNumber(this, -1, 'm2')">-</button>
@@ -1403,7 +1345,6 @@
                         <button onclick="changeNumber(this, 1, 'm2')">+</button>
                     </div>
                 </td>
-                <td class="m2-points">0</td>
                 <td>
                     <div class="number-controls">
                         <button onclick="changeNumber(this, -1, 'm3')">-</button>
@@ -1411,7 +1352,6 @@
                         <button onclick="changeNumber(this, 1, 'm3')">+</button>
                     </div>
                 </td>
-                <td class="m3-points">0</td>
                 <td>
                     <div class="number-controls">
                         <button onclick="changeNumber(this, -1, 'm4')">-</button>
@@ -1419,7 +1359,6 @@
                         <button onclick="changeNumber(this, 1, 'm4')">+</button>
                     </div>
                 </td>
-                <td class="m4-points">0</td>
                 <td>
                     <div class="number-controls">
                         <button onclick="changeNumber(this, -1, 'm5')">-</button>
@@ -1427,7 +1366,6 @@
                         <button onclick="changeNumber(this, 1, 'm5')">+</button>
                     </div>
                 </td>
-                <td class="m5-points">0</td>
                 <td>
                     <div class="number-controls">
                         <button onclick="changeNumber(this, -1, 'm6')">-</button>
@@ -1435,7 +1373,6 @@
                         <button onclick="changeNumber(this, 1, 'm6')">+</button>
                     </div>
                 </td>
-                <td class="m6-points">0</td>
                 <td>
                     <div class="number-controls">
                         <button onclick="changeNumber(this, -1, 'm7')">-</button>
@@ -1443,7 +1380,6 @@
                         <button onclick="changeNumber(this, 1, 'm7')">+</button>
                     </div>
                 </td>
-                <td class="m7-points">0</td>
                 <td>
                     <div class="number-controls">
                         <button onclick="changeNumber(this, -1, 'm8')">-</button>
@@ -1451,19 +1387,14 @@
                         <button onclick="changeNumber(this, 1, 'm8')">+</button>
                     </div>
                 </td>
-                <td class="m8-points">0</td>
                 <td><button class="delete-btn" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button></td>
             `;
             tbody.appendChild(row);
             updateCalculations();
-            
-            // 立即自动保存
-            autoSave();
-            
+            if (save) autoSave();
             return row;
         }
         
-        // 数字增减功能
         function changeNumber(button, change, type) {
             const controlsDiv = button.closest('.number-controls');
             const input = controlsDiv.querySelector('input');
@@ -1474,7 +1405,6 @@
             calculateRow(input);
         }
         
-        // 计算单行数据
         function calculateRow(input) {
             const row = input.closest('tr');
             const nameInput = row.querySelector('.name');
@@ -1489,7 +1419,6 @@
             const m7 = parseInt(row.querySelector('.m7').value) || 0;
             const m8 = parseInt(row.querySelector('.m8').value) || 0;
             
-            // 计算各项积分
             const m1Points = m1 * POINT_RULES.m1;
             const m2Points = m2 * POINT_RULES.m2;
             const m3Points = m3 * POINT_RULES.m3;
@@ -1501,18 +1430,8 @@
             
             const totalPoints = m1Points + m2Points + m3Points + m4Points + m5Points + m6Points + m7Points + m8Points;
             
-            // 更新显示
-            row.querySelector('.m1-points').textContent = m1Points;
-            row.querySelector('.m2-points').textContent = m2Points;
-            row.querySelector('.m3-points').textContent = m3Points;
-            row.querySelector('.m4-points').textContent = m4Points;
-            row.querySelector('.m5-points').textContent = m5Points;
-            row.querySelector('.m6-points').textContent = m6Points;
-            row.querySelector('.m7-points').textContent = m7Points;
-            row.querySelector('.m8-points').textContent = m8Points;
             row.querySelector('.member-points').textContent = `${totalPoints} Poin`;
             
-            // 记录当前时间和积分
             if (!participantRecords[name]) {
                 participantRecords[name] = {
                     maxPoints: 0,
@@ -1520,7 +1439,6 @@
                 };
             }
             
-            // 只有当积分增加时才更新时间
             if (totalPoints > participantRecords[name].maxPoints) {
                 participantRecords[name] = {
                     maxPoints: totalPoints,
@@ -1529,15 +1447,12 @@
             }
             
             updateCalculations();
-            // 立即自动保存
             autoSave();
         }
         
-        // 更新所有计算和排名
         function updateCalculations() {
             const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
             let totalM1 = 0, totalM2 = 0, totalM3 = 0, totalM4 = 0, totalM5 = 0, totalM6 = 0, totalM7 = 0, totalM8 = 0;
-            let totalM1Points = 0, totalM2Points = 0, totalM3Points = 0, totalM4Points = 0, totalM5Points = 0, totalM6Points = 0, totalM7Points = 0, totalM8Points = 0;
             
             rows.forEach(row => {
                 totalM1 += parseInt(row.querySelector('.m1').value) || 0;
@@ -1548,70 +1463,41 @@
                 totalM6 += parseInt(row.querySelector('.m6').value) || 0;
                 totalM7 += parseInt(row.querySelector('.m7').value) || 0;
                 totalM8 += parseInt(row.querySelector('.m8').value) || 0;
-                
-                totalM1Points += parseInt(row.querySelector('.m1-points').textContent) || 0;
-                totalM2Points += parseInt(row.querySelector('.m2-points').textContent) || 0;
-                totalM3Points += parseInt(row.querySelector('.m3-points').textContent) || 0;
-                totalM4Points += parseInt(row.querySelector('.m4-points').textContent) || 0;
-                totalM5Points += parseInt(row.querySelector('.m5-points').textContent) || 0;
-                totalM6Points += parseInt(row.querySelector('.m6-points').textContent) || 0;
-                totalM7Points += parseInt(row.querySelector('.m7-points').textContent) || 0;
-                totalM8Points += parseInt(row.querySelector('.m8-points').textContent) || 0;
             });
             
             document.getElementById('totalM1').textContent = totalM1;
-            document.getElementById('totalM1Points').textContent = totalM1Points;
             document.getElementById('totalM2').textContent = totalM2;
-            document.getElementById('totalM2Points').textContent = totalM2Points;
             document.getElementById('totalM3').textContent = totalM3;
-            document.getElementById('totalM3Points').textContent = totalM3Points;
             document.getElementById('totalM4').textContent = totalM4;
-            document.getElementById('totalM4Points').textContent = totalM4Points;
             document.getElementById('totalM5').textContent = totalM5;
-            document.getElementById('totalM5Points').textContent = totalM5Points;
             document.getElementById('totalM6').textContent = totalM6;
-            document.getElementById('totalM6Points').textContent = totalM6Points;
             document.getElementById('totalM7').textContent = totalM7;
-            document.getElementById('totalM7Points').textContent = totalM7Points;
             document.getElementById('totalM8').textContent = totalM8;
-            document.getElementById('totalM8Points').textContent = totalM8Points;
             
             updateRanking();
         }
         
-        // 更新排名
         function updateRanking() {
             const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
             
-            // 先按积分排序，积分相同的按达到时间排序
             rows.sort((a, b) => {
                 const nameA = a.querySelector('.name').value || "未命名成员";
                 const nameB = b.querySelector('.name').value || "未命名成员";
                 const totalA = parseInt(a.querySelector('.member-points').textContent) || 0;
                 const totalB = parseInt(b.querySelector('.member-points').textContent) || 0;
                 
-                // 积分高的排在前面
                 if (totalA !== totalB) {
                     return totalB - totalA;
                 }
                 
-                // 积分相同时，比较谁先达到这个积分
                 const timeA = participantRecords[nameA]?.reachTime || new Date();
                 const timeB = participantRecords[nameB]?.reachTime || new Date();
-                
-                // 时间早的排在前面
                 return timeA - timeB;
-            });
-            
-            // 更新排名显示
-            rows.forEach((row, index) => {
-                row.querySelector('.rank').textContent = index + 1;
             });
             
             updateLeaderboard();
         }
         
-        // 更新排行榜显示
         function updateLeaderboard() {
             const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
             const leaderboard = document.querySelector('.leaderboard ol');
@@ -1621,7 +1507,6 @@
                 return;
             }
             
-            // 使用与updateRanking相同的排序逻辑
             rows.sort((a, b) => {
                 const nameA = a.querySelector('.name').value || "未命名成员";
                 const nameB = b.querySelector('.name').value || "未命名成员";
@@ -1639,13 +1524,11 @@
             
             leaderboard.innerHTML = '';
             
-            // 显示所有成员
             rows.forEach((row, index) => {
                 const name = row.querySelector('.name').value || "未命名成员";
                 const totalPoints = row.querySelector('.member-points').textContent;
                 
                 const li = document.createElement('li');
-                
                 li.innerHTML = `
                     <div><strong>${index + 1}.</strong> ${name}</div>
                     <div>${totalPoints}</div>
@@ -1654,7 +1537,6 @@
             });
         }
         
-        // 删除行
         function deleteRow(button) {
             const row = button.closest('tr');
             if (document.querySelectorAll('#scoreTable tbody tr').length > 1) {
@@ -1663,7 +1545,6 @@
                     delete participantRecords[name];
                     row.remove();
                     updateCalculations();
-                    // 立即自动保存
                     autoSave();
                 }
             } else {
@@ -1671,7 +1552,6 @@
             }
         }
         
-        // 重置表格
         function resetTable() {
             if (confirm('确定要重置表格吗？所有数据将丢失。')) {
                 const tbody = document.querySelector('#scoreTable tbody');
@@ -1686,11 +1566,9 @@
             }
         }
         
-        // 复制排行榜到剪贴板
         function copyLeaderboard() {
             const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
             
-            // 使用与updateRanking相同的排序逻辑
             rows.sort((a, b) => {
                 const nameA = a.querySelector('.name').value || "未命名成员";
                 const nameB = b.querySelector('.name').value || "未命名成员";
@@ -1719,7 +1597,6 @@
                 let name = row.querySelector('.name').value || "未命名成员";
                 const totalPoints = row.querySelector('.member-points').textContent;
                 
-                // 处理账号显示格式：前面1位，后面5位，中间用*号代替
                 if (name.length > 6) {
                     const firstChar = name.substring(0, 1);
                     const lastPart = name.substring(name.length - 5);
@@ -1729,7 +1606,6 @@
                 text += `${index + 1}. ${name}: ${totalPoints}\n`;
             });
             
-            // 在底部添加请求的短语
             text += "\nKursi pertumbuhan selalu menjadi milik orang yang mengulurkan tangan lebih dulu！";
             
             navigator.clipboard.writeText(text).then(() => {
@@ -1740,14 +1616,12 @@
             });
         }
         
-        // 显示复制成功通知
         function showCopyNotification(message) {
             const notification = document.getElementById('copyNotification');
             notification.querySelector('span:last-child').textContent = message;
             notification.style.opacity = 0;
             notification.style.display = 'flex';
             
-            // 触发动画
             setTimeout(() => {
                 notification.style.opacity = 1;
                 notification.style.transform = 'translateY(0)';
