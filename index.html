@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>员工积分统计系统 | BWM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #4a6fa5;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 10px;
+            --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e1eeff 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+            animation: headerAnimation 10s infinite alternate;
+        }
+        
+        @keyframes headerAnimation {
+            0% { background: linear-gradient(135deg, #2c3e50, #4a6fa5); }
+            50% { background: linear-gradient(135deg, #4a6fa5, #3498db); }
+            100% { background: linear-gradient(135deg, #3498db, #2c3e50); }
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            font-weight: 300;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .dashboard {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stats-panel {
+            flex: 1;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--light-gray);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .leaderboard-panel {
+            width: 350px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            transition: var(--transition);
+            position: sticky;
+            top: 20px;
+            overflow: hidden;
+            border: 1px solid var(--light-gray);
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 200px);
+        }
+        
+        .panel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-light), var(--secondary));
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+            position: relative;
+        }
+        
+        .panel-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .panel-title i {
+            color: var(--primary-light);
+            background: rgba(74, 111, 165, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        
+        button {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(30deg);
+            transition: var(--transition);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        button:hover::after {
+            transform: rotate(30deg) translate(10px, 10px);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button.delete-btn {
+            background: linear-gradient(135deg, var(--danger), #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        button.save-btn {
+            background: linear-gradient(135deg, var(--success), #219653);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        button.leaderboard-copy {
+            background: linear-gradient(135deg, var(--secondary), #2980b9);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .table-container {
+            flex: 1;
+            overflow: visible;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 0.9rem;
+            table-layout: auto;
+        }
+        
+        th, td {
+            border: 1px solid var(--light-gray);
+            padding: 12px 8px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        th {
+            background: linear-gradient(to bottom, var(--primary-light), var(--primary));
+            color: white;
+            position: sticky;
+            top: 0;
+            font-weight: 600;
+            height: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        tr:hover {
+            background-color: #edf5ff;
+        }
+        
+        input {
+            width: 60px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-weight: 600;
+            color: var(--primary);
+            background: #f8fafc;
+        }
+        
+        input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+            outline: none;
+            background: white;
+        }
+        
+        .name-input {
+            width: 120px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .leaderboard-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+        }
+        
+        .leaderboard {
+            flex: 1;
+            overflow-y: auto;
+            margin-top: 15px;
+            max-height: 400px;
+        }
+        
+        .leaderboard ol {
+            padding-left: 0;
+            list-style: none;
+        }
+        
+        .leaderboard li {
+            margin-bottom: 12px;
+            padding: 15px 18px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-light);
+            position: relative;
+        }
+        
+        .leaderboard li::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(74, 111, 165, 0.05), transparent);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+        
+        .leaderboard li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .leaderboard li:hover::before {
+            opacity: 1;
+        }
+        
+        .leaderboard li div:first-child {
+            font-weight: 600;
+            color: var(--primary);
+            position: relative;
+            z-index: 1;
+            font-size: 0.95rem;
+        }
+        
+        .leaderboard li div:last-child {
+            background: var(--primary-light);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 3px 8px rgba(74, 111, 165, 0.3);
+            font-size: 0.9rem;
+        }
+        
+        .copy-notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--success), #219653);
+            color: white;
+            padding: 18px 28px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            animation: fadeInOut 3s ease-in-out;
+            opacity: 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translateY(-20px); }
+            10%, 90% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .number-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .number-controls button {
+            padding: 6px 10px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            border-radius: 8px;
+        }
+        
+        .auto-save-notice {
+            text-align: center;
+            color: var(--success);
+            font-size: 0.95rem;
+            margin: 15px 0 25px;
+            padding: 12px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 12px;
+            font-weight: 500;
+            border: 1px dashed var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .member-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px;
+        }
+        
+        .member-name {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+        
+        .member-points {
+            font-size: 0.85rem;
+            color: var(--success);
+            font-weight: 700;
+            background: rgba(39, 174, 96, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .ranking-rule {
+            background: #fffaf0;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: var(--dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .ranking-rule i {
+            font-size: 22px;
+            color: var(--warning);
+            flex-shrink: 0;
+        }
+        
+        .add-member-btn {
+            padding: 9px 18px;
+            font-size: 0.95rem;
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            font-weight: 600;
+        }
+        
+        .add-member-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .upgrade-highlight {
+            background: linear-gradient(to bottom, rgba(155, 89, 182, 0.1), rgba(155, 89, 182, 0.05));
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 30px;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        /* 奖励规则样式 */
+        .rewards-section {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .rewards-header {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .rewards-header i {
+            color: var(--warning);
+            background: rgba(243, 156, 18, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .reward-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid var(--warning);
+        }
+        
+        .reward-card:nth-child(1) {
+            border-left-color: #FFD700; /* 金色 */
+        }
+        
+        .reward-card:nth-child(2) {
+            border-left-color: #C0C0C0; /* 银色 */
+        }
+        
+        .reward-card:nth-child(3) {
+            border-left-color: #CD7F32; /* 铜色 */
+        }
+        
+        .reward-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(30deg);
+            transition: var(--transition);
+        }
+        
+        .reward-card:hover::before {
+            transform: translateX(100%) rotate(30deg);
+        }
+        
+        .reward-rank {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .reward-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--warning);
+            margin-bottom: 10px;
+        }
+        
+        .reward-description {
+            font-size: 0.95rem;
+            color: var(--dark);
+            line-height: 1.5;
+        }
+        
+        .points-system {
+            background: rgba(52, 152, 219, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .points-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .points-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .point-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .point-level {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .point-value {
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        .eligibility-note {
+            text-align: center;
+            padding: 15px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 600;
+            color: var(--success);
+            border: 1px dashed var(--success);
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 1400px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .leaderboard-panel {
+                width: 100%;
+                position: static;
+                max-height: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+                padding-right: 70px;
+            }
+            
+            .logo {
+                top: 15px;
+                right: 15px;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .control-group {
+                width: 100%;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+                padding: 14px;
+                font-size: 0.95rem;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+                font-size: 0.8rem;
+            }
+            
+            input {
+                width: 50px;
+                padding: 6px;
+            }
+            
+            .name-input {
+                width: 100px;
+                font-size: 0.85rem;
+            }
+            
+            .stats-panel, .leaderboard-panel, .rewards-section {
+                padding: 20px 15px;
+            }
+            
+            .panel-title, .rewards-header {
+                font-size: 1.3rem;
+            }
+            
+            .auto-save-notice {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+            
+            .rewards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.9rem;
+            }
+            
+            .panel-title, .rewards-header {
+                font-size: 1.2rem;
+            }
+            
+            th, td {
+                padding: 7px 4px;
+                font-size: 0.75rem;
+            }
+            
+            input {
+                width: 45px;
+                font-size: 0.8rem;
+                padding: 5px;
+            }
+            
+            .name-input {
+                width: 90px;
+                font-size: 0.8rem;
+            }
+            
+            .number-controls button {
+                padding: 5px 8px;
+                font-size: 0.8rem;
+                min-width: 28px;
+            }
+            
+            .member-name {
+                font-size: 0.85rem;
+            }
+            
+            .member-points {
+                font-size: 0.8rem;
+            }
+            
+            .add-member-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .reward-card {
+                padding: 15px;
+            }
+            
+            .reward-value {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .controls button {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+            
+            .name-input {
+                width: 80px;
+            }
+            
+            input {
+                width: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h1>员工积分统计系统</h1>
+            <p class="subtitle">你只管努力，其他交给天意</p>
+        </header>
+        
+        <div class="auto-save-notice">
+            <i class="fas fa-sync-alt"></i>
+            所有操作后数据将自动保存，建议定期手动保存以防数据丢失
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <button class="save-btn" onclick="manualSave()">
+                    <i class="fas fa-save"></i> 手动保存数据
+                </button>
+            </div>
+            <div class="control-group">
+                <button class="leaderboard-copy" onclick="copyLeaderboard()">
+                    <i class="fas fa-trophy"></i> 复制排行榜
+                </button>
+                <button onclick="resetTable()" class="delete-btn">
+                    <i class="fas fa-redo"></i> 重置表格
+                </button>
+            </div>
+        </div>
+        
+        <div class="ranking-rule">
+            <i class="fas fa-lightbulb"></i>
+            <div>
+                <strong>今日激励：</strong>泪水打湿猪脚饭，发誓今年要赚100万！今天你努力了吗？
+            </div>
+        </div>
+        
+        <div class="dashboard">
+            <div class="stats-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-table"></i> 积分统计表</h2>
+                </div>
+                
+                <div class="table-container">
+                    <table id="scoreTable">
+                        <thead>
+                            <tr>
+                                <th>排名</th>
+                                <th>成员信息</th>
+                                <th>M1数量</th>
+                                <th>M1积分</th>
+                                <th>M2数量</th>
+                                <th>M2积分</th>
+                                <th>M3数量</th>
+                                <th>M3积分</th>
+                                <th>M4数量</th>
+                                <th>M4积分</th>
+                                <th>M5数量</th>
+                                <th>M5积分</th>
+                                <th>M6数量</th>
+                                <th>M6积分</th>
+                                <th>M7数量</th>
+                                <th>M7积分</th>
+                                <th>M8数量</th>
+                                <th>M8积分</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="rank">1</td>
+                                <td>
+                                    <div class="member-info">
+                                        <div class="member-name"><input type="text" class="name name-input" value="张三丰"></div>
+                                        <div class="member-points">198 Poin</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm1')">-</button>
+                                        <input type="number" class="m1" min="0" value="15" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm1')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m1-points">15</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm2')">-</button>
+                                        <input type="number" class="m2" min="0" value="12" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm2')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m2-points">36</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm3')">-</button>
+                                        <input type="number" class="m3" min="0" value="8" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm3')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m3-points">80</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm4')">-</button>
+                                        <input type="number" class="m4" min="0" value="3" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm4')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m4-points">90</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm5')">-</button>
+                                        <input type="number" class="m5" min="0" value="1" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm5')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m5-points">60</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm6')">-</button>
+                                        <input type="number" class="m6" min="0" value="0" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm6')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m6-points">0</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm7')">-</button>
+                                        <input type="number" class="m7" min="0" value="0" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm7')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m7-points">0</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm8')">-</button>
+                                        <input type="number" class="m8" min="0" value="0" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm8')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m8-points">0</td>
+                                <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td class="rank">2</td>
+                                <td>
+                                    <div class="member-info">
+                                        <div class="member-name"><input type="text" class="name name-input" value="李四"></div>
+                                        <div class="member-points">156 Poin</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm1')">-</button>
+                                        <input type="number" class="m1" min="0" value="18" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm1')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m1-points">18</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm2')">-</button>
+                                        <input type="number" class="m2" min="0" value="10" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm2')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m2-points">30</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm3')">-</button>
+                                        <input type="number" class="m3" min="0" value="6" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm3')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m3-points">60</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm4')">-</button>
+                                        <input type="number" class="m4" min="0" value="2" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm4')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m4-points">60</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm5')">-</button>
+                                        <input type="number" class="m5" min="0" value="0" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm5')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m5-points">0</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm6')">-</button>
+                                        <input type="number" class="m6" min="0" value="0" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm6')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m6-points">0</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm7')">-</button>
+                                        <input type="number" class="m7" min="0" value="0" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm7')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m7-points">0</td>
+                                <td>
+                                    <div class="number-controls">
+                                        <button onclick="changeNumber(this, -1, 'm8')">-</button>
+                                        <input type="number" class="m8" min="0" value="0" oninput="calculateRow(this)">
+                                        <button onclick="changeNumber(this, 1, 'm8')">+</button>
+                                    </div>
+                                </td>
+                                <td class="m8-points">0</td>
+                                <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2"><button class="add-member-btn" onclick="addParticipant()"><i class="fas fa-plus"></i> 添加新成员</button></td>
+                                <td id="totalM1">33</td>
+                                <td id="totalM1Points">33</td>
+                                <td id="totalM2">22</td>
+                                <td id="totalM2Points">66</td>
+                                <td id="totalM3">14</td>
+                                <td id="totalM3Points">140</td>
+                                <td id="totalM4">5</td>
+                                <td id="totalM4Points">150</td>
+                                <td id="totalM5">1</td>
+                                <td id="totalM5Points">60</td>
+                                <td id="totalM6">0</td>
+                                <td id="totalM6Points">0</td>
+                                <td id="totalM7">0</td>
+                                <td id="totalM7Points">0</td>
+                                <td id="totalM8">0</td>
+                                <td id="totalM8Points">0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="leaderboard-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-trophy"></i> 实时排行榜</h2>
+                </div>
+                
+                <button class="leaderboard-copy" onclick="copyLeaderboard()">
+                    <i class="fas fa-copy"></i> 复制排行榜
+                </button>
+                
+                <div class="leaderboard-container">
+                    <div class="leaderboard">
+                        <ol>
+                            <li>
+                                <div><strong>1.</strong> 张三丰</div>
+                                <div>198 Poin</div>
+                            </li>
+                            <li>
+                                <div><strong>2.</strong> 李四</div>
+                                <div>156 Poin</div>
+                            </li>
+                            <li>
+                                <div><strong>3.</strong> 王五</div>
+                                <div>128 Poin</div>
+                            </li>
+                            <li>
+                                <div><strong>4.</strong> 赵六</div>
+                                <div>105 Poin</div>
+                            </li>
+                            <li>
+                                <div><strong>5.</strong> 钱七</div>
+                                <div>92 Poin</div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 奖励规则部分 -->
+        <div class="rewards-section">
+            <h2 class="rewards-header"><i class="fas fa-trophy"></i> 奖励规则</h2>
+            
+            <div class="eligibility-note">
+                <i class="fas fa-info-circle"></i> 积分达到60分及以上即可参与排名！
+            </div>
+            
+            <div class="rewards-grid">
+                <div class="reward-card">
+                    <div class="reward-rank">🏆 第一名</div>
+                    <div class="reward-value">1500万印尼盾</div>
+                    <div class="reward-description">价值 1500 万印尼盾的 999k 黄金首饰（请自选型号！）✨</div>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-rank">🥈 第二名</div>
+                    <div class="reward-value">1000万印尼盾</div>
+                    <div class="reward-description">价值 1000 万印尼盾的笔记本电脑（请自选品牌！）💻</div>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-rank">🥉 第三名</div>
+                    <div class="reward-value">800万印尼盾</div>
+                    <div class="reward-description">价值 800 万印尼盾的家用电器（请自选品牌和型号！）🏠</div>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-rank">🎯 第四名</div>
+                    <div class="reward-value">500万印尼盾</div>
+                    <div class="reward-description">价值 500 万印尼盾的平板电脑（请自选品牌！）📱</div>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-rank">⭐ 第五名</div>
+                    <div class="reward-value">300万印尼盾</div>
+                    <div class="reward-description">价值 300 万印尼盾的手机（请自选品牌！）📲</div>
+                </div>
+            </div>
+            
+            <div class="points-system">
+                <h3 class="points-title"><i class="fas fa-star"></i> 如何赚取积分：</h3>
+                <div class="points-list">
+                    <div class="point-item">
+                        <span class="point-level">邀请 M1</span>
+                        <span class="point-value">+1 分</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-level">邀请 M2</span>
+                        <span class="point-value">+3 分</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-level">邀请 M3</span>
+                        <span class="point-value">+10 分</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-level">邀请 M4</span>
+                        <span class="point-value">+30 分</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-level">邀请 M5</span>
+                        <span class="point-value">+60 分</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-level">邀请 M6</span>
+                        <span class="point-value">+120 分</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-level">邀请 M7</span>
+                        <span class="point-value">+240 分</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-level">邀请 M8</span>
+                        <span class="point-value">+500 分</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 BWM团队激励计划 | 员工积分统计系统 v2.1</p>
+            <p>数据安全存储 | 实时自动备份 | 公平透明机制</p>
+        </div>
+    </div>
+    
+    <div class="copy-notification" id="copyNotification">
+        <span>✅</span> <span>排行榜已复制到剪贴板！</span>
+    </div>
+    
+    <div class="copy-notification" id="saveNotification" style="background: linear-gradient(135deg, var(--success), #219653);">
+        <span>✅</span> <span>数据保存成功！</span>
+    </div>
+
+    <script>
+        // 创建一个对象来记录每个成员达到当前积分的时间
+        const participantRecords = {};
+        
+        // 自动保存的键名
+        const STORAGE_KEY = 'employee_invitation_score_data';
+        const RECORDS_STORAGE_KEY = 'employee_invitation_records_data';
+        
+        // 积分规则
+        const POINT_RULES = {
+            m1: 1,
+            m2: 3,
+            m3: 10,
+            m4: 30,
+            m5: 60,
+            m6: 120,
+            m7: 240,
+            m8: 500
+        };
+        
+        // 初始化表格
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+            if (document.querySelectorAll('#scoreTable tbody tr').length === 0) {
+                addParticipant();
+            }
+        });
+        
+        // 加载保存的数据
+        function loadSavedData() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            const savedRecords = localStorage.getItem(RECORDS_STORAGE_KEY);
+            
+            // 加载时间记录数据
+            if (savedRecords) {
+                try {
+                    const records = JSON.parse(savedRecords);
+                    // 将字符串日期转换为Date对象
+                    for (const name in records) {
+                        if (records[name] && records[name].reachTime) {
+                            records[name].reachTime = new Date(records[name].reachTime);
+                        }
+                    }
+                    Object.assign(participantRecords, records);
+                } catch (e) {
+                    console.error('解析保存的记录失败:', e);
+                }
+            }
+            
+            // 加载表格数据
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    document.querySelector('#scoreTable tbody').innerHTML = '';
+                    
+                    data.forEach(rowData => {
+                        const row = addParticipant(false);
+                        row.querySelector('.name').value = rowData.name || "";
+                        row.querySelector('.m1').value = rowData.m1 || 0;
+                        row.querySelector('.m2').value = rowData.m2 || 0;
+                        row.querySelector('.m3').value = rowData.m3 || 0;
+                        row.querySelector('.m4').value = rowData.m4 || 0;
+                        row.querySelector('.m5').value = rowData.m5 || 0;
+                        row.querySelector('.m6').value = rowData.m6 || 0;
+                        row.querySelector('.m7').value = rowData.m7 || 0;
+                        row.querySelector('.m8').value = rowData.m8 || 0;
+                        
+                        // 计算并更新行数据
+                        calculateRow(row.querySelector('.m1'));
+                        
+                        // 确保新添加的成员有时间记录
+                        const name = rowData.name || "未命名成员";
+                        if (!participantRecords[name]) {
+                            participantRecords[name] = {
+                                maxPoints: parseInt(row.querySelector('.member-points').textContent) || 0,
+                                reachTime: new Date()
+                            };
+                        }
+                    });
+                    
+                    updateCalculations();
+                    showSaveNotification('数据加载成功！');
+                } catch (e) {
+                    console.error('解析保存的数据失败:', e);
+                }
+            }
+        }
+        
+        // 保存数据到本地存储
+        function saveData() {
+            const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
+            const dataToSave = rows.map(row => ({
+                name: row.querySelector('.name').value,
+                m1: row.querySelector('.m1').value,
+                m2: row.querySelector('.m2').value,
+                m3: row.querySelector('.m3').value,
+                m4: row.querySelector('.m4').value,
+                m5: row.querySelector('.m5').value,
+                m6: row.querySelector('.m6').value,
+                m7: row.querySelector('.m7').value,
+                m8: row.querySelector('.m8').value
+            }));
+            
+            // 准备时间记录数据，将Date对象转换为字符串
+            const recordsToSave = {};
+            for (const name in participantRecords) {
+                if (participantRecords[name]) {
+                    recordsToSave[name] = {
+                        maxPoints: participantRecords[name].maxPoints,
+                        reachTime: participantRecords[name].reachTime.toISOString() // 转换为ISO字符串
+                    };
+                }
+            }
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+            localStorage.setItem(RECORDS_STORAGE_KEY, JSON.stringify(recordsToSave));
+        }
+        
+        // 手动保存
+        function manualSave() {
+            saveData();
+            showSaveNotification('数据已手动保存！');
+        }
+        
+        // 自动保存（立即执行）
+        function autoSave() {
+            saveData();
+            console.log('数据自动保存');
+        }
+        
+        // 显示保存成功通知
+        function showSaveNotification(message) {
+            const notification = document.getElementById('saveNotification');
+            notification.querySelector('span:last-child').textContent = message;
+            notification.style.opacity = 0;
+            notification.style.display = 'flex';
+            
+            // 触发动画
+            setTimeout(() => {
+                notification.style.opacity = 1;
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.opacity = 0;
+                notification.style.transform = 'translateY(-20px)';
+            }, 3000);
+        }
+        
+        // 添加新参与者
+        function addParticipant(save = true) {
+            const tbody = document.querySelector('#scoreTable tbody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="rank"></td>
+                <td>
+                    <div class="member-info">
+                        <div class="member-name"><input type="text" class="name name-input" placeholder="会员账号"></div>
+                        <div class="member-points">0 Poin</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="number-controls">
+                        <button onclick="changeNumber(this, -1, 'm1')">-</button>
+                        <input type="number" class="m1" min="0" value="0" oninput="calculateRow(this)">
+                        <button onclick="changeNumber(this, 1, 'm1')">+</button>
+                    </div>
+                </td>
+                <td class="m1-points">0</td>
+                <td>
+                    <div class="number-controls">
+                        <button onclick="changeNumber(this, -1, 'm2')">-</button>
+                        <input type="number" class="m2" min="0" value="0" oninput="calculateRow(this)">
+                        <button onclick="changeNumber(this, 1, 'm2')">+</button>
+                    </div>
+                </td>
+                <td class="m2-points">0</td>
+                <td>
+                    <div class="number-controls">
+                        <button onclick="changeNumber(this, -1, 'm3')">-</button>
+                        <input type="number" class="m3" min="0" value="0" oninput="calculateRow(this)">
+                        <button onclick="changeNumber(this, 1, 'm3')">+</button>
+                    </div>
+                </td>
+                <td class="m3-points">0</td>
+                <td>
+                    <div class="number-controls">
+                        <button onclick="changeNumber(this, -1, 'm4')">-</button>
+                        <input type="number" class="m4" min="0" value="0" oninput="calculateRow(this)">
+                        <button onclick="changeNumber(this, 1, 'm4')">+</button>
+                    </div>
+                </td>
+                <td class="m4-points">0</td>
+                <td>
+                    <div class="number-controls">
+                        <button onclick="changeNumber(this, -1, 'm5')">-</button>
+                        <input type="number" class="m5" min="0" value="0" oninput="calculateRow(this)">
+                        <button onclick="changeNumber(this, 1, 'm5')">+</button>
+                    </div>
+                </td>
+                <td class="m5-points">0</td>
+                <td>
+                    <div class="number-controls">
+                        <button onclick="changeNumber(this, -1, 'm6')">-</button>
+                        <input type="number" class="m6" min="0" value="0" oninput="calculateRow(this)">
+                        <button onclick="changeNumber(this, 1, 'm6')">+</button>
+                    </div>
+                </td>
+                <td class="m6-points">0</td>
+                <td>
+                    <div class="number-controls">
+                        <button onclick="changeNumber(this, -1, 'm7')">-</button>
+                        <input type="number" class="m7" min="0" value="0" oninput="calculateRow(this)">
+                        <button onclick="changeNumber(this, 1, 'm7')">+</button>
+                    </div>
+                </td>
+                <td class="m7-points">0</td>
+                <td>
+                    <div class="number-controls">
+                        <button onclick="changeNumber(this, -1, 'm8')">-</button>
+                        <input type="number" class="m8" min="0" value="0" oninput="calculateRow(this)">
+                        <button onclick="changeNumber(this, 1, 'm8')">+</button>
+                    </div>
+                </td>
+                <td class="m8-points">0</td>
+                <td><button class="delete-btn" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button></td>
+            `;
+            tbody.appendChild(row);
+            updateCalculations();
+            
+            // 立即自动保存
+            autoSave();
+            
+            return row;
+        }
+        
+        // 数字增减功能
+        function changeNumber(button, change, type) {
+            const controlsDiv = button.closest('.number-controls');
+            const input = controlsDiv.querySelector('input');
+            let value = parseInt(input.value) || 0;
+            value += change;
+            if (value < 0) value = 0;
+            input.value = value;
+            calculateRow(input);
+        }
+        
+        // 计算单行数据
+        function calculateRow(input) {
+            const row = input.closest('tr');
+            const nameInput = row.querySelector('.name');
+            const name = nameInput.value || "未命名成员";
+            
+            const m1 = parseInt(row.querySelector('.m1').value) || 0;
+            const m2 = parseInt(row.querySelector('.m2').value) || 0;
+            const m3 = parseInt(row.querySelector('.m3').value) || 0;
+            const m4 = parseInt(row.querySelector('.m4').value) || 0;
+            const m5 = parseInt(row.querySelector('.m5').value) || 0;
+            const m6 = parseInt(row.querySelector('.m6').value) || 0;
+            const m7 = parseInt(row.querySelector('.m7').value) || 0;
+            const m8 = parseInt(row.querySelector('.m8').value) || 0;
+            
+            // 计算各项积分
+            const m1Points = m1 * POINT_RULES.m1;
+            const m2Points = m2 * POINT_RULES.m2;
+            const m3Points = m3 * POINT_RULES.m3;
+            const m4Points = m4 * POINT_RULES.m4;
+            const m5Points = m5 * POINT_RULES.m5;
+            const m6Points = m6 * POINT_RULES.m6;
+            const m7Points = m7 * POINT_RULES.m7;
+            const m8Points = m8 * POINT_RULES.m8;
+            
+            const totalPoints = m1Points + m2Points + m3Points + m4Points + m5Points + m6Points + m7Points + m8Points;
+            
+            // 更新显示
+            row.querySelector('.m1-points').textContent = m1Points;
+            row.querySelector('.m2-points').textContent = m2Points;
+            row.querySelector('.m3-points').textContent = m3Points;
+            row.querySelector('.m4-points').textContent = m4Points;
+            row.querySelector('.m5-points').textContent = m5Points;
+            row.querySelector('.m6-points').textContent = m6Points;
+            row.querySelector('.m7-points').textContent = m7Points;
+            row.querySelector('.m8-points').textContent = m8Points;
+            row.querySelector('.member-points').textContent = `${totalPoints} Poin`;
+            
+            // 记录当前时间和积分
+            if (!participantRecords[name]) {
+                participantRecords[name] = {
+                    maxPoints: 0,
+                    reachTime: new Date()
+                };
+            }
+            
+            // 只有当积分增加时才更新时间
+            if (totalPoints > participantRecords[name].maxPoints) {
+                participantRecords[name] = {
+                    maxPoints: totalPoints,
+                    reachTime: new Date()
+                };
+            }
+            
+            updateCalculations();
+            // 立即自动保存
+            autoSave();
+        }
+        
+        // 更新所有计算和排名
+        function updateCalculations() {
+            const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
+            let totalM1 = 0, totalM2 = 0, totalM3 = 0, totalM4 = 0, totalM5 = 0, totalM6 = 0, totalM7 = 0, totalM8 = 0;
+            let totalM1Points = 0, totalM2Points = 0, totalM3Points = 0, totalM4Points = 0, totalM5Points = 0, totalM6Points = 0, totalM7Points = 0, totalM8Points = 0;
+            
+            rows.forEach(row => {
+                totalM1 += parseInt(row.querySelector('.m1').value) || 0;
+                totalM2 += parseInt(row.querySelector('.m2').value) || 0;
+                totalM3 += parseInt(row.querySelector('.m3').value) || 0;
+                totalM4 += parseInt(row.querySelector('.m4').value) || 0;
+                totalM5 += parseInt(row.querySelector('.m5').value) || 0;
+                totalM6 += parseInt(row.querySelector('.m6').value) || 0;
+                totalM7 += parseInt(row.querySelector('.m7').value) || 0;
+                totalM8 += parseInt(row.querySelector('.m8').value) || 0;
+                
+                totalM1Points += parseInt(row.querySelector('.m1-points').textContent) || 0;
+                totalM2Points += parseInt(row.querySelector('.m2-points').textContent) || 0;
+                totalM3Points += parseInt(row.querySelector('.m3-points').textContent) || 0;
+                totalM4Points += parseInt(row.querySelector('.m4-points').textContent) || 0;
+                totalM5Points += parseInt(row.querySelector('.m5-points').textContent) || 0;
+                totalM6Points += parseInt(row.querySelector('.m6-points').textContent) || 0;
+                totalM7Points += parseInt(row.querySelector('.m7-points').textContent) || 0;
+                totalM8Points += parseInt(row.querySelector('.m8-points').textContent) || 0;
+            });
+            
+            document.getElementById('totalM1').textContent = totalM1;
+            document.getElementById('totalM1Points').textContent = totalM1Points;
+            document.getElementById('totalM2').textContent = totalM2;
+            document.getElementById('totalM2Points').textContent = totalM2Points;
+            document.getElementById('totalM3').textContent = totalM3;
+            document.getElementById('totalM3Points').textContent = totalM3Points;
+            document.getElementById('totalM4').textContent = totalM4;
+            document.getElementById('totalM4Points').textContent = totalM4Points;
+            document.getElementById('totalM5').textContent = totalM5;
+            document.getElementById('totalM5Points').textContent = totalM5Points;
+            document.getElementById('totalM6').textContent = totalM6;
+            document.getElementById('totalM6Points').textContent = totalM6Points;
+            document.getElementById('totalM7').textContent = totalM7;
+            document.getElementById('totalM7Points').textContent = totalM7Points;
+            document.getElementById('totalM8').textContent = totalM8;
+            document.getElementById('totalM8Points').textContent = totalM8Points;
+            
+            updateRanking();
+        }
+        
+        // 更新排名
+        function updateRanking() {
+            const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
+            
+            // 先按积分排序，积分相同的按达到时间排序
+            rows.sort((a, b) => {
+                const nameA = a.querySelector('.name').value || "未命名成员";
+                const nameB = b.querySelector('.name').value || "未命名成员";
+                const totalA = parseInt(a.querySelector('.member-points').textContent) || 0;
+                const totalB = parseInt(b.querySelector('.member-points').textContent) || 0;
+                
+                // 积分高的排在前面
+                if (totalA !== totalB) {
+                    return totalB - totalA;
+                }
+                
+                // 积分相同时，比较谁先达到这个积分
+                const timeA = participantRecords[nameA]?.reachTime || new Date();
+                const timeB = participantRecords[nameB]?.reachTime || new Date();
+                
+                // 时间早的排在前面
+                return timeA - timeB;
+            });
+            
+            // 更新排名显示
+            rows.forEach((row, index) => {
+                row.querySelector('.rank').textContent = index + 1;
+            });
+            
+            updateLeaderboard();
+        }
+        
+        // 更新排行榜显示
+        function updateLeaderboard() {
+            const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
+            const leaderboard = document.querySelector('.leaderboard ol');
+            
+            if (rows.length === 0) {
+                leaderboard.innerHTML = '<p>暂无数据，请添加成员并输入积分</p>';
+                return;
+            }
+            
+            // 使用与updateRanking相同的排序逻辑
+            rows.sort((a, b) => {
+                const nameA = a.querySelector('.name').value || "未命名成员";
+                const nameB = b.querySelector('.name').value || "未命名成员";
+                const totalA = parseInt(a.querySelector('.member-points').textContent) || 0;
+                const totalB = parseInt(b.querySelector('.member-points').textContent) || 0;
+                
+                if (totalA !== totalB) {
+                    return totalB - totalA;
+                }
+                
+                const timeA = participantRecords[nameA]?.reachTime || new Date();
+                const timeB = participantRecords[nameB]?.reachTime || new Date();
+                return timeA - timeB;
+            });
+            
+            leaderboard.innerHTML = '';
+            
+            // 显示所有成员
+            rows.forEach((row, index) => {
+                const name = row.querySelector('.name').value || "未命名成员";
+                const totalPoints = row.querySelector('.member-points').textContent;
+                
+                const li = document.createElement('li');
+                
+                li.innerHTML = `
+                    <div><strong>${index + 1}.</strong> ${name}</div>
+                    <div>${totalPoints}</div>
+                `;
+                leaderboard.appendChild(li);
+            });
+        }
+        
+        // 删除行
+        function deleteRow(button) {
+            const row = button.closest('tr');
+            if (document.querySelectorAll('#scoreTable tbody tr').length > 1) {
+                if (confirm('确定要删除此行吗？')) {
+                    const name = row.querySelector('.name').value || "未命名成员";
+                    delete participantRecords[name];
+                    row.remove();
+                    updateCalculations();
+                    // 立即自动保存
+                    autoSave();
+                }
+            } else {
+                alert("至少需要保留一个成员");
+            }
+        }
+        
+        // 重置表格
+        function resetTable() {
+            if (confirm('确定要重置表格吗？所有数据将丢失。')) {
+                const tbody = document.querySelector('#scoreTable tbody');
+                tbody.innerHTML = '';
+                for (const key in participantRecords) {
+                    delete participantRecords[key];
+                }
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(RECORDS_STORAGE_KEY);
+                addParticipant();
+                updateCalculations();
+            }
+        }
+        
+        // 复制排行榜到剪贴板
+        function copyLeaderboard() {
+            const rows = Array.from(document.querySelectorAll('#scoreTable tbody tr'));
+            
+            // 使用与updateRanking相同的排序逻辑
+            rows.sort((a, b) => {
+                const nameA = a.querySelector('.name').value || "未命名成员";
+                const nameB = b.querySelector('.name').value || "未命名成员";
+                const totalA = parseInt(a.querySelector('.member-points').textContent) || 0;
+                const totalB = parseInt(b.querySelector('.member-points').textContent) || 0;
+                
+                if (totalA !== totalB) {
+                    return totalB - totalA;
+                }
+                
+                const timeA = participantRecords[nameA]?.reachTime || new Date();
+                const timeB = participantRecords[nameB]?.reachTime || new Date();
+                return timeA - timeB;
+            });
+            
+            const top10 = rows.slice(0, 10);
+            
+            if (top10.length === 0) {
+                showCopyNotification("没有数据可复制");
+                return;
+            }
+            
+            let text = `🏆 Peringkat poin karyawan secara real-time 🏆\n\n`;
+            
+            top10.forEach((row, index) => {
+                let name = row.querySelector('.name').value || "未命名成员";
+                const totalPoints = row.querySelector('.member-points').textContent;
+                
+                // 处理账号显示格式：前面1位，后面5位，中间用*号代替
+                if (name.length > 6) {
+                    const firstChar = name.substring(0, 1);
+                    const lastPart = name.substring(name.length - 5);
+                    name = `${firstChar}***${lastPart}`;
+                }
+                
+                text += `${index + 1}. ${name}: ${totalPoints}\n`;
+            });
+            
+            // 在底部添加请求的短语
+            text += "\nKursi pertumbuhan selalu menjadi milik orang yang mengulurkan tangan lebih dulu！";
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyNotification("排行榜已复制到剪贴板！");
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+        
+        // 显示复制成功通知
+        function showCopyNotification(message) {
+            const notification = document.getElementById('copyNotification');
+            notification.querySelector('span:last-child').textContent = message;
+            notification.style.opacity = 0;
+            notification.style.display = 'flex';
+            
+            // 触发动画
+            setTimeout(() => {
+                notification.style.opacity = 1;
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.opacity = 0;
+                notification.style.transform = 'translateY(-20px)';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
